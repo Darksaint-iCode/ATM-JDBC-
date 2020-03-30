@@ -63,14 +63,13 @@ public class ATM_Code {
         userTrans();
     }    
 
-    public static void userTrans() throws SQLException, ClassNotFoundException {
+    private static void userTrans() throws SQLException, ClassNotFoundException {
         Scanner choTrans = new Scanner(System.in);
         
         System.out.println("Press 1 for Withdrawals");
         System.out.println("Press 2 for Deposits");
-        System.out.println("Press 3 for Balance Inquires");
-        System.out.println("Press 4 for Transfer");
-        System.out.println("Press 5 for Change Pin \n");
+        System.out.println("Press 3 for Transfer");
+        System.out.println("Press 4 for Change Pin \n");
         System.out.print("Choose a Transaction: ");
         
         int selTrans = choTrans.nextInt();
@@ -78,13 +77,11 @@ public class ATM_Code {
         switch(selTrans){
             case 1: selWithdrawals();
                 break;
-            case 2:
+            case 2: selDeposits();
                 break;
             case 3:
                 break;
             case 4:
-                break;
-            case 5:
                 break;
             default:
         }
@@ -253,6 +250,41 @@ public class ATM_Code {
         System.out.print("Input 1 for Yes and 2 for No: ");
         
         int perTrans = coptD.nextInt();
+        
+        if(perTrans == 1){
+            userTrans();
+        }else{
+        System.out.println("Thanks for Banking with us :)");
+        System.exit(0);
+        }
+    }
+
+    private static void selDeposits() throws SQLException, ClassNotFoundException {
+        Scanner choDepo = new Scanner(System.in);
+        
+        System.out.println("\nDeposit \n");
+        System.out.print("Input amount to deposit: ");
+        
+        double damo = choDepo.nextInt();
+        
+        double a = accAmount + damo;
+        
+        con = ATM_Machine.getConnection();
+        String sql = "update Account_Info set Account_Amount=? where Account_Name=?;";
+        pst = con.prepareStatement(sql);
+        pst.setDouble(1, a);
+        pst.setString(2, accName);
+        pst.executeUpdate();
+        pst.close();
+        con.close();
+
+        System.out.println("Deposit Successful!");
+        System.out.println("\nNew Balance = N" + a + "\n");
+        
+        System.out.println("Do you wanna perform another Transaction?");
+        System.out.print("Input 1 for Yes and 2 for No: ");
+        
+        int perTrans = choDepo.nextInt();
         
         if(perTrans == 1){
             userTrans();
