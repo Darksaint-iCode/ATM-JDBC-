@@ -22,7 +22,7 @@ public class ATM_Machine {
     Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
     Connection con = DriverManager.getConnection(URL);
     if (con != null){
-        System.out.println("Connection Successful");
+        System.out.print("");
     } else{
         System.out.println("Connection UnSuccessful");
     }
