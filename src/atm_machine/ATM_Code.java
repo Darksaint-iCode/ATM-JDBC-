@@ -17,6 +17,7 @@ public class ATM_Code {
         
     static String accName;
     static double accAmount;
+    static int valPin;
     static Connection con;
     static ResultSet rs;
     static Statement st;
@@ -38,6 +39,7 @@ public class ATM_Code {
             rs = pst.executeQuery();
             
             if (rs.next()){
+                valPin = uPin;
                 accName = rs.getString("Account_Name");
                 accAmount = rs.getDouble("Account_Amount");
                 System.out.println("Pin Correct! \n");
@@ -68,8 +70,8 @@ public class ATM_Code {
         
         System.out.println("Press 1 for Withdrawals");
         System.out.println("Press 2 for Deposits");
-        System.out.println("Press 3 for Transfer");
-        System.out.println("Press 4 for Change Pin \n");
+        System.out.println("Press 3 for Change Pin");
+        System.out.println("Press 4 to Cnacel Operation \n");
         System.out.print("Choose a Transaction: ");
         
         int selTrans = choTrans.nextInt();
@@ -79,11 +81,12 @@ public class ATM_Code {
                 break;
             case 2: selDeposits();
                 break;
-            case 3:
+            case 3: selChagPin();
                 break;
-            case 4:
+            case 4: System.exit(0);
                 break;
-            default:
+            default: System.out.println("Invalid Entry");
+                    userTrans();
         }
     }
 
@@ -285,6 +288,38 @@ public class ATM_Code {
         System.out.print("Input 1 for Yes and 2 for No: ");
         
         int perTrans = choDepo.nextInt();
+        
+        if(perTrans == 1){
+            userTrans();
+        }else{
+        System.out.println("Thanks for Banking with us :)");
+        System.exit(0);
+        }
+    }
+
+    private static void selChagPin() throws SQLException, ClassNotFoundException {
+        Scanner choPin = new Scanner(System.in);
+        
+        System.out.println("\nChange Pin \n");
+        System.out.print("Input new Pin: ");
+        
+        int inewpin = choPin.nextInt();
+        
+        con = ATM_Machine.getConnection();
+        String sql = "update Account_Info set Account_Pin=? where Account_Name=?;";
+        pst = con.prepareStatement(sql);
+        pst.setInt(1, inewpin);
+        pst.setString(2, accName);
+        pst.executeUpdate();
+        pst.close();
+        con.close();
+        
+        System.out.println("\nChange of Pin: Successful! \n");
+        
+        System.out.println("Do you wanna perform another Transaction?");
+        System.out.print("Input 1 for Yes and 2 for No: ");
+        
+        int perTrans = choPin.nextInt();
         
         if(perTrans == 1){
             userTrans();
